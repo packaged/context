@@ -7,6 +7,7 @@ use Packaged\Event\Channel\Channel;
 use Packaged\Helpers\System;
 use Packaged\Http\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use function dirname;
 use function getenv;
 use function php_sapi_name;
 use function uniqid;
@@ -73,6 +74,10 @@ class Context
 
   public function getProjectRoot(): string
   {
+    if($this->_projectRoot === null)
+    {
+      $this->_projectRoot = dirname(dirname(dirname(dirname((__DIR__)))));
+    }
     return $this->_projectRoot;
   }
 

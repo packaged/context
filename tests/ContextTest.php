@@ -10,6 +10,7 @@ use Packaged\Http\Request;
 use Packaged\Tests\Context\Supporting\TestContextAwareObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use function dirname;
 
 class ContextTest extends TestCase
 {
@@ -77,6 +78,8 @@ class ContextTest extends TestCase
   public function testProjectRoot()
   {
     $ctx = new Context();
+    $this->assertEquals(dirname(dirname(dirname(dirname((__DIR__))))), $ctx->getProjectRoot());
+
     $ctx->setProjectRoot('abc/def');
     $this->assertEquals('abc/def', $ctx->getProjectRoot());
   }
