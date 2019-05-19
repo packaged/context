@@ -1,0 +1,31 @@
+{
+  "name": "packaged/context",
+  "description": "Context",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Brooke Bryan",
+      "email": "brooke@bajb.net"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "packaged/config": "~1.4",
+    "packaged/http": "~1.3",
+    "packaged/event": "~1.0",
+    "packaged/helpers": "~2.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Packaged\\Context\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Packaged\\Tests\\Context\\": "tests"
+    }
+  }
+}
