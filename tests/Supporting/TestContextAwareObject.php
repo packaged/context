@@ -13,8 +13,8 @@ class TestContextAwareObject implements ContextAware
     return $this->_bindContext($to);
   }
 
-  public function with(ContextAware $to)
+  public function apply(ContextAware $to)
   {
-    return $this->_withContext($to);
+    return $this->_applyContext($to);
   }
 }

@@ -42,7 +42,7 @@ trait ContextAwareTrait
    *
    * @return ContextAware
    */
-  protected function _withContext(ContextAware $to)
+  protected function _applyContext(ContextAware $to)
   {
     $to->setContext($this->getContext());
     return $to;
