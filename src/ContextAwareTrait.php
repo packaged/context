@@ -36,6 +36,19 @@ trait ContextAwareTrait
   }
 
   /**
+   * Bind context to a context aware object, and return it
+   *
+   * @param ContextAware $to
+   *
+   * @return ContextAware
+   */
+  protected function _withContext(ContextAware $to)
+  {
+    $to->setContext($this->getContext());
+    return $to;
+  }
+
+  /**
    * @return Context
    */
   public function getContext(): Context

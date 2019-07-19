@@ -63,8 +63,15 @@ class ContextTest extends TestCase
 
     $obj2->setContext($ctx);
     $obj2->bind($obj);
-    $this->assertTrue($obj->hasContext());
+    $this->assertTrue($obj2->hasContext());
     $this->assertSame($ctx, $obj->getContext());
+
+    $obj3 = new TestContextAwareObject();
+    $obj4 = $obj2->with($obj3);
+    $this->assertTrue($obj3->hasContext());
+    $this->assertSame($ctx, $obj3->getContext());
+    $this->assertSame($obj3, $obj4);
+    $this->assertSame($ctx, $obj4->getContext());
   }
 
   public function testConfig()
