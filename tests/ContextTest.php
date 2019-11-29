@@ -6,6 +6,7 @@ use Packaged\Config\Provider\ConfigProvider;
 use Packaged\Context\Context;
 use Packaged\Event\Channel\Channel;
 use Packaged\Helpers\Arrays;
+use Packaged\Http\Cookies\CookieJar;
 use Packaged\Http\Request;
 use Packaged\Tests\Context\Supporting\TestContextAwareObject;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +24,7 @@ class ContextTest extends TestCase
     $this->assertInstanceOf(ConfigProvider::class, $ctx->getConfig());
     $this->assertInstanceOf(Request::class, $ctx->request());
     $this->assertInstanceOf(Channel::class, $ctx->events());
+    $this->assertInstanceOf(CookieJar::class, $ctx->cookies());
     $this->assertEquals(Context::ENV_LOCAL, $ctx->getEnvironment());
     $this->assertTrue($ctx->isCli());
     $this->assertStringStartsWith('ctx-', $ctx->id());

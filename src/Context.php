@@ -5,6 +5,7 @@ use Packaged\Config\ConfigProviderInterface;
 use Packaged\Config\Provider\ConfigProvider;
 use Packaged\Event\Channel\Channel;
 use Packaged\Helpers\System;
+use Packaged\Http\Cookies\CookieJar;
 use Packaged\Http\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use function dirname;
@@ -33,6 +34,7 @@ class Context
   private $_id;
   private $_events;
   private $_request;
+  private $_cookieJar;
 
   public final function __construct(Request $request = null)
   {
@@ -197,6 +199,26 @@ class Context
     return $this->_events;
   }
 
+  /**
+   * Cookies for the request
+   *
+   * @return CookieJar
+   */
+  public function cookies(): CookieJar
+  {
+    if($this->_cookieJar === null)
+    {
+      $this->_cookieJar = new CookieJar();
+      $this->_cookieJar->hydrate($this->request());
+    }
+    return $this->_cookieJar;
+  }
+
+  /**
+   * Retrieve the CONTEXT_ENV from the environment
+   *
+   * @return array|false|string
+   */
   public function getSystemEnvironment()
   {
     //Calculate the environment
