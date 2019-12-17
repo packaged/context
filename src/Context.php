@@ -13,7 +13,7 @@ use function getenv;
 use function php_sapi_name;
 use function uniqid;
 
-class Context
+class Context implements ContextAware
 {
   const _ENV_VAR = 'CONTEXT_ENV';
 
@@ -233,4 +233,24 @@ class Context
     }
     return $env;
   }
+
+  public function setContext(Context $context)
+  {
+    if($context !== $this)
+    {
+      throw new \Exception("You cannot set context on context");
+    }
+    return $this;
+  }
+
+  public function getContext(): Context
+  {
+    return $this;
+  }
+
+  public function hasContext(): bool
+  {
+    return true;
+  }
+
 }

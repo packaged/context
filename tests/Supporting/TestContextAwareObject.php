@@ -3,10 +3,13 @@ namespace Packaged\Tests\Context\Supporting;
 
 use Packaged\Context\ContextAware;
 use Packaged\Context\ContextAwareTrait;
+use Packaged\Context\WithContext;
+use Packaged\Context\WithContextTrait;
 
-class TestContextAwareObject implements ContextAware
+class TestContextAwareObject implements ContextAware, WithContext
 {
   use ContextAwareTrait;
+  use WithContextTrait;
 
   public function bind(ContextAware $to)
   {

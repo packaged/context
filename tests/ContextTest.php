@@ -101,4 +101,26 @@ class ContextTest extends TestCase
     $this->assertEquals('/abc', $ctx->getProjectRoot());
     $this->assertEquals(Context::ENV_QA, $ctx->getEnvironment());
   }
+
+  public function testWithContext()
+  {
+    $req = new Request();
+    $ctx = Context::create('/abc', Context::ENV_QA, $req);
+
+    $this->assertTrue($ctx->hasContext());
+    $this->assertSame($ctx, $ctx->getContext());
+    $obj = TestContextAwareObject::withContext($ctx);
+    $this->assertTrue($obj->hasContext());
+    $this->assertSame($ctx, $obj->getContext());
+  }
+
+  public function testCannotSetContext()
+  {
+    $req = new Request();
+    $ctx = Context::create('/abc', Context::ENV_QA, $req);
+    $ctx2 = Context::create('/abc', Context::ENV_QA, $req);
+    $ctx->setContext($ctx);
+    $this->expectExceptionMessage("You cannot set context on context");
+    $ctx->setContext($ctx2);
+  }
 }
