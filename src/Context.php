@@ -3,6 +3,7 @@ namespace Packaged\Context;
 
 use Packaged\Config\ConfigProviderInterface;
 use Packaged\Config\Provider\ConfigProvider;
+use Packaged\Context\Events\ContextDoneEvent;
 use Packaged\Event\Channel\Channel;
 use Packaged\Helpers\System;
 use Packaged\Http\Cookies\CookieJar;
@@ -25,6 +26,10 @@ class Context implements ContextAware
   const ENV_STAGE = 'stage';
   const ENV_PROD = 'prod';
 
+  const DONE_DESTRUCT = 1;
+  const DONE_MANUAL = 2;
+  const DONE_TIMEOUT = 3;
+
   protected $_projectRoot;
   protected $_env;
   protected $_cfg;
@@ -32,6 +37,7 @@ class Context implements ContextAware
   protected $_routeData;
 
   private $_id;
+  private $_done;
   private $_events;
   private $_request;
   private $_cookieJar;
@@ -251,6 +257,49 @@ class Context implements ContextAware
   public function hasContext(): bool
   {
     return true;
+  }
+
+  public function withTimeout(int $duration)
+  {
+    new ContextTimeout($this, $duration);
+    return $this;
+  }
+
+  /**
+   * Mark the context as done, and trigger the done event
+   *
+   * @param $reason
+   *
+   * @return bool
+   * @throws \Exception
+   */
+  public function done($reason = ContextDoneEvent::RSN_TRIGGER)
+  {
+    if($this->_done === null)
+    {
+      $this->_done = $reason;
+      $this->events()->trigger(new ContextDoneEvent($reason));
+    }
+    return true;
+  }
+
+  public function isDone(): bool
+  {
+    return $this->_done !== null;
+  }
+
+  public function __destruct()
+  {
+    if($this->_events && !$this->_done)
+    {
+      try
+      {
+        $this->done(ContextDoneEvent::RSN_DESTRUCT);
+      }
+      catch(\Exception $e)
+      {
+      }
+    }
   }
 
 }
