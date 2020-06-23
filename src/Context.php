@@ -35,6 +35,10 @@ class Context implements ContextAware
   private $_events;
   private $_request;
   private $_cookieJar;
+  /**
+   * @var Context
+   */
+  private $_parent;
 
   public final function __construct(Request $request = null)
   {
@@ -251,6 +255,32 @@ class Context implements ContextAware
   public function hasContext(): bool
   {
     return true;
+  }
+
+  final public static function withParent(Context $parentCtx)
+  {
+    $ctx = new static();
+    $ctx->_parent = $parentCtx;
+    return $ctx;
+  }
+
+  public function hasParent()
+  {
+    return $this->_parent !== null;
+  }
+
+  public function parent($root = false): ?Context
+  {
+    if($root)
+    {
+      $ctx = $this->_parent;
+      while($ctx && $ctx->_parent)
+      {
+        $ctx = $ctx->_parent;
+      }
+      return $ctx;
+    }
+    return $this->_parent;
   }
 
 }
