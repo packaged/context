@@ -29,6 +29,10 @@ class Context implements ContextAware
   protected $_env;
   protected $_cfg;
   protected $_meta;
+  /**
+   * @var ParameterBag
+   */
+  protected $_environmentData;
   protected $_routeData;
 
   private $_id;
@@ -160,6 +164,18 @@ class Context implements ContextAware
   /**
    * @return ParameterBag
    */
+  public function environmentData()
+  {
+    if($this->_environmentData === null)
+    {
+      $this->_environmentData = new ParameterBag($_ENV);
+    }
+    return $this->_environmentData;
+  }
+
+  /**
+   * @return ParameterBag
+   */
   public function meta()
   {
     if($this->_meta === null)
@@ -282,5 +298,4 @@ class Context implements ContextAware
     }
     return $this->_parent;
   }
-
 }
