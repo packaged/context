@@ -212,10 +212,15 @@ class Context implements ContextAware
   {
     if($this->_cookieJar === null)
     {
-      $this->_cookieJar = new CookieJar();
+      $this->_cookieJar = $this->_configureCookieJar(new CookieJar());
       $this->_cookieJar->hydrate($this->request());
     }
     return $this->_cookieJar;
+  }
+
+  protected function _configureCookieJar(CookieJar $jar): CookieJar
+  {
+    return $jar;
   }
 
   /**
