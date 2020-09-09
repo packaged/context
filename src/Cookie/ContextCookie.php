@@ -46,4 +46,10 @@ abstract class ContextCookie implements ContextAware, WithContext
     $this->getContext()->cookies()->store($this->name(), $this->_getRawValue(), $this->ttl());
     return $this;
   }
+
+  public function delete()
+  {
+    $this->getContext()->cookies()->delete($this->name());
+    return $this;
+  }
 }
