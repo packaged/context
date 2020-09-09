@@ -11,6 +11,11 @@ abstract class ContextCookie implements ContextAware, WithContext
   use ContextAwareTrait;
   use WithContextTrait;
 
+  public static function loaded(ContextAware $ctx, bool $checkQueued = true)
+  {
+    return static::withContext($ctx)->read($checkQueued);
+  }
+
   /**
    * @var string|null
    */
