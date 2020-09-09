@@ -48,7 +48,8 @@ abstract class ContextCookie implements ContextAware, WithContext
    */
   public function read(bool $checkQueued = true)
   {
-    return $this->_setRawValue($this->getContext()->cookies()->read($this->name(), $checkQueued));
+    $val = $this->getContext()->cookies()->read($this->name(), $checkQueued);
+    return $val !== null ? $this->_setRawValue($val) : $this;
   }
 
   protected function _getRawValue(): ?string
