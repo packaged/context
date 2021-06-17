@@ -288,4 +288,15 @@ class Context implements ContextAware
     return $this->_parent;
   }
 
+  public function __debugInfo()
+  {
+    return [
+      'id'          => $this->_id,
+      'env'         => $this->_env,
+      'projectRoot' => $this->_projectRoot,
+      'meta'        => $this->_meta,
+      'routeData'   => $this->_routeData,
+      'request'     => $this->_request,
+    ];
+  }
 }
