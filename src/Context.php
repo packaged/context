@@ -98,6 +98,21 @@ class Context implements ContextAware
     return $this->getEnvironment() === $env;
   }
 
+  public function isLocal()
+  {
+    return $this->isEnv(static::ENV_LOCAL);
+  }
+
+  public function isProd()
+  {
+    return $this->isEnv(static::ENV_PROD);
+  }
+
+  public function isUnitTest()
+  {
+    return $this->isEnv(static::ENV_PHPUNIT);
+  }
+
   public function getEnvironment(): string
   {
     if($this->_env === null)

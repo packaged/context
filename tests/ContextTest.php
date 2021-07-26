@@ -49,6 +49,21 @@ class ContextTest extends TestCase
     $this->assertFalse($ctx->isEnv(Context::ENV_QA));
     $ctx->setEnvironment(Context::ENV_QA);
     $this->assertTrue($ctx->isEnv(Context::ENV_QA));
+
+    $ctx->setEnvironment('invalid');
+    $this->assertFalse($ctx->isLocal());
+    $ctx->setEnvironment(Context::ENV_LOCAL);
+    $this->assertTrue($ctx->isLocal());
+
+    $ctx->setEnvironment('invalid');
+    $this->assertFalse($ctx->isProd());
+    $ctx->setEnvironment(Context::ENV_PROD);
+    $this->assertTrue($ctx->isProd());
+
+    $ctx->setEnvironment('invalid');
+    $this->assertFalse($ctx->isUnitTest());
+    $ctx->setEnvironment(Context::ENV_PHPUNIT);
+    $this->assertTrue($ctx->isUnitTest());
   }
 
   public function testContextAware()
