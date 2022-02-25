@@ -3,6 +3,7 @@ namespace Packaged\Context;
 
 use Packaged\Config\ConfigProviderInterface;
 use Packaged\Config\Provider\ConfigProvider;
+use Packaged\Context\Conditions\ExpectEnvironment;
 use Packaged\Event\Channel\Channel;
 use Packaged\Helpers\System;
 use Packaged\Http\Cookies\CookieJar;
@@ -93,24 +94,28 @@ class Context implements ContextAware
     return $this;
   }
 
+  /** @deprecated user matches(new ExpectEnvironment($env)) */
   public function isEnv(string $env)
   {
-    return $this->getEnvironment() === $env;
+    return $this->matches(new ExpectEnvironment($env));
   }
 
+  /** @deprecated user matches(ExpectEnvironment::local()) */
   public function isLocal()
   {
-    return $this->isEnv(static::ENV_LOCAL);
+    return $this->matches(ExpectEnvironment::local());
   }
 
+  /** @deprecated user matches(ExpectEnvironment::prod()) */
   public function isProd()
   {
-    return $this->isEnv(static::ENV_PROD);
+    return $this->matches(ExpectEnvironment::prod());
   }
 
+  /** @deprecated user matches(ExpectEnvironment::phpunit()) */
   public function isUnitTest()
   {
-    return $this->isEnv(static::ENV_PHPUNIT);
+    return $this->matches(ExpectEnvironment::phpunit());
   }
 
   public function getEnvironment(): string
@@ -301,6 +306,18 @@ class Context implements ContextAware
       return $ctx;
     }
     return $this->_parent;
+  }
+
+  public function matches(Condition ...$condition): bool
+  {
+    foreach($condition as $cond)
+    {
+      if(!$cond->isSatisfied($this))
+      {
+        return false;
+      }
+    }
+    return true;
   }
 
   public function __debugInfo()
