@@ -148,6 +148,7 @@ class ContextTest extends TestCase
 
     $this->assertEquals($ctx->getEnvironment(), $ctx2->getEnvironment());
     $this->assertEquals($ctx->getProjectRoot(), $ctx2->getProjectRoot());
+    $this->assertEquals($ctx->id(), $ctx2->id());
 
     $ctx = Context::create('/abc', Context::ENV_QA);
     $ctx->meta()->set('abc', 'def');

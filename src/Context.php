@@ -65,21 +65,17 @@ class Context implements ContextAware
 
   public static function extends(Context $ctx)
   {
-    $c = new static($ctx->request());
-    $c->setEnvironment($ctx->getEnvironment());
-    $c->setProjectRoot($ctx->getProjectRoot());
-    $c->setConfig($ctx->getConfig());
+    $c = new static();
+    $c->_projectRoot = $ctx->_projectRoot;
+    $c->_env = $ctx->_env;
+    $c->_cfg = $ctx->_cfg;
+    $c->_meta = $ctx->_meta;
+    $c->_routeData = $ctx->_routeData;
 
-    foreach($ctx->routeData()->all() as $key => $value)
-    {
-      $c->routeData()->set($key, $value);
-    }
-
-    foreach($ctx->meta()->all() as $key => $value)
-    {
-      $c->meta()->set($key, $value);
-    }
-
+    $c->_id = $ctx->_id;
+    $c->_events = $ctx->_events;
+    $c->_request = $ctx->_request;
+    $c->_cookieJar = $ctx->_cookieJar;
     return $c;
   }
 
