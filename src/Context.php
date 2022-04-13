@@ -63,6 +63,22 @@ class Context implements ContextAware
     return $ctx;
   }
 
+  public static function extends(Context $ctx)
+  {
+    $c = new static();
+    $c->_projectRoot = $ctx->_projectRoot;
+    $c->_env = $ctx->_env;
+    $c->_cfg = $ctx->_cfg;
+    $c->_meta = $ctx->_meta;
+    $c->_routeData = $ctx->_routeData;
+
+    $c->_id = $ctx->_id;
+    $c->_events = $ctx->_events;
+    $c->_request = $ctx->_request;
+    $c->_cookieJar = $ctx->_cookieJar;
+    return $c;
+  }
+
   protected function _generateId()
   {
     return uniqid('ctx-', true);

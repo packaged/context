@@ -138,4 +138,34 @@ class ContextTest extends TestCase
     $this->expectExceptionMessage("You cannot set context on context");
     $ctx->setContext($ctx2);
   }
+
+  public function testExtendingContext()
+  {
+    $ctx = new Context();
+    $ctx->setEnvironment(Context::ENV_PROD);
+    $ctx->setProjectRoot('/abc');
+    $ctx2 = Context::extends($ctx);
+
+    $this->assertEquals($ctx->getEnvironment(), $ctx2->getEnvironment());
+    $this->assertEquals($ctx->getProjectRoot(), $ctx2->getProjectRoot());
+    $this->assertEquals($ctx->id(), $ctx2->id());
+
+    $ctx = Context::create('/abc', Context::ENV_QA);
+    $ctx->meta()->set('abc', 'def');
+    $ctx2 = Context::extends($ctx);
+
+    $this->assertEquals($ctx->getProjectRoot(), $ctx2->getProjectRoot());
+    $this->assertEquals('def', $ctx2->meta()->get('abc'));
+
+    $cnf = new ConfigProvider();
+    $ctx->setConfig($cnf);
+    $ctx->routeData()->set('123', '456');
+
+    $ctx2 = Context::extends($ctx);
+
+    $this->assertSame($cnf, $ctx2->getConfig());
+    $this->assertEquals('def', $ctx2->meta()->get('abc'));
+    $this->assertEquals('456', $ctx2->routeData()->get('123'));
+
+  }
 }
