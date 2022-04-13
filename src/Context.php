@@ -63,6 +63,26 @@ class Context implements ContextAware
     return $ctx;
   }
 
+  public static function extends(Context $ctx)
+  {
+    $c = new static($ctx->request());
+    $c->setEnvironment($ctx->getEnvironment());
+    $c->setProjectRoot($ctx->getProjectRoot());
+    $c->setConfig($ctx->getConfig());
+
+    foreach($ctx->routeData()->all() as $key => $value)
+    {
+      $c->routeData()->set($key, $value);
+    }
+
+    foreach($ctx->meta()->all() as $key => $value)
+    {
+      $c->meta()->set($key, $value);
+    }
+
+    return $c;
+  }
+
   protected function _generateId()
   {
     return uniqid('ctx-', true);
