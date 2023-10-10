@@ -108,6 +108,18 @@ class ContextTest extends TestCase
     $this->assertEquals('abc/def', $ctx->getProjectRoot());
   }
 
+  public function testConfigRoot()
+  {
+    $ctx = new Context();
+    $this->assertEquals(
+      dirname(dirname(dirname(dirname((__DIR__))))) . DIRECTORY_SEPARATOR . '.cubex' . DIRECTORY_SEPARATOR . 'conf',
+      $ctx->getConfigRoot()
+    );
+
+    $ctx->setConfigRoot('abc/def');
+    $this->assertEquals('abc/def', $ctx->getConfigRoot());
+  }
+
   public function testStaticCreate()
   {
     $req = new Request();
@@ -166,6 +178,5 @@ class ContextTest extends TestCase
     $this->assertSame($cnf, $ctx2->getConfig());
     $this->assertEquals('def', $ctx2->meta()->get('abc'));
     $this->assertEquals('456', $ctx2->routeData()->get('123'));
-
   }
 }

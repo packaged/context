@@ -27,6 +27,7 @@ class Context implements ContextAware
   const ENV_PROD = 'prod';
 
   protected $_projectRoot;
+  protected $_configRoot;
   protected $_env;
   protected $_cfg;
   protected $_meta;
@@ -107,6 +108,24 @@ class Context implements ContextAware
   public function setProjectRoot(string $root)
   {
     $this->_projectRoot = $root;
+    return $this;
+  }
+
+  public function getConfigRoot(): string
+  {
+    if($this->_configRoot === null)
+    {
+      $this->_configRoot = rtrim(
+          $this->getProjectRoot(),
+          '/'
+        ) . DIRECTORY_SEPARATOR . 'conf';
+    }
+    return $this->_configRoot;
+  }
+
+  public function setConfigRoot(string $root)
+  {
+    $this->_configRoot = $root;
     return $this;
   }
 
@@ -342,6 +361,7 @@ class Context implements ContextAware
       'id'          => $this->_id,
       'env'         => $this->_env,
       'projectRoot' => $this->_projectRoot,
+      'configRoot'  => $this->_configRoot,
       'meta'        => $this->_meta,
       'routeData'   => $this->_routeData,
       'request'     => $this->_request,
