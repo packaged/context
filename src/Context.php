@@ -118,7 +118,7 @@ class Context implements ContextAware
       $this->_configRoot = rtrim(
           $this->getProjectRoot(),
           '/'
-        ) . DIRECTORY_SEPARATOR . '.cubex' . DIRECTORY_SEPARATOR . 'conf';
+        ) . DIRECTORY_SEPARATOR . 'conf';
     }
     return $this->_configRoot;
   }
