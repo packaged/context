@@ -336,6 +336,18 @@ class Context implements ContextAware
     return true;
   }
 
+  public function matchAny(Condition ...$condition): bool
+  {
+    foreach($condition as $cond)
+    {
+      if($cond->isSatisfied($this))
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public function __debugInfo()
   {
     return [

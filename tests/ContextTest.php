@@ -3,6 +3,7 @@
 namespace Packaged\Tests\Context;
 
 use Packaged\Config\Provider\ConfigProvider;
+use Packaged\Context\Conditions\ExpectEnvironment;
 use Packaged\Context\Context;
 use Packaged\Event\Channel\Channel;
 use Packaged\Helpers\Arrays;
@@ -166,6 +167,58 @@ class ContextTest extends TestCase
     $this->assertSame($cnf, $ctx2->getConfig());
     $this->assertEquals('def', $ctx2->meta()->get('abc'));
     $this->assertEquals('456', $ctx2->routeData()->get('123'));
+  }
 
+  /**
+   * @param $environment
+   * @param $condition
+   * @param $expected
+   *
+   * @return void
+   * @dataProvider providerMatches
+   */
+  public function testMatches($environment, $condition, $expected)
+  {
+    $ctx = new Context();
+    $ctx->setEnvironment($environment);
+    self::assertEquals($expected, $ctx->matches($condition));
+  }
+
+  public function providerMatches()
+  {
+    return [
+      [Context::ENV_PROD, ExpectEnvironment::prod(), true],
+      [Context::ENV_LOCAL, ExpectEnvironment::local(), true],
+      [Context::ENV_DEV, ExpectEnvironment::dev(), true],
+      [Context::ENV_PHPUNIT, ExpectEnvironment::phpunit(), true],
+      [Context::ENV_PROD, ExpectEnvironment::local(), false],
+      [Context::ENV_PROD, ExpectEnvironment::dev(), false],
+      [Context::ENV_PROD, ExpectEnvironment::phpunit(), false],
+    ];
+  }
+
+  /**
+   * @param $environment
+   * @param $conditions
+   * @param $expected
+   *
+   * @return void
+   * @dataProvider providerMatchAny
+   */
+  public function testMatchAny($environment, array $conditions, $expected)
+  {
+    $ctx = new Context();
+    $ctx->setEnvironment($environment);
+    self::assertEquals($expected, $ctx->matchAny(...$conditions));
+  }
+
+  public function providerMatchAny()
+  {
+    return [
+      [Context::ENV_PROD, [ExpectEnvironment::prod()], true],
+      [Context::ENV_PROD, [ExpectEnvironment::prod(), ExpectEnvironment::uat()], true],
+      [Context::ENV_UAT, [ExpectEnvironment::prod(), ExpectEnvironment::uat()], true],
+      [Context::ENV_LOCAL, [ExpectEnvironment::prod(), ExpectEnvironment::uat()], false],
+    ];
   }
 }
