@@ -41,7 +41,7 @@ class Context implements ContextAware
    */
   private $_parent;
 
-  public final function __construct(Request $request = null)
+  public final function __construct(?Request $request = null)
   {
     // Give this context an ID
     $this->_id = $this->_generateId();
@@ -49,7 +49,7 @@ class Context implements ContextAware
     $this->_construct();
   }
 
-  public static function create(string $projectRoot = null, string $environment = null, Request $request = null)
+  public static function create(?string $projectRoot = null, ?string $environment = null, ?Request $request = null)
   {
     $ctx = new static($request);
     if($projectRoot !== null)
